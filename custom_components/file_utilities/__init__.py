@@ -1,8 +1,8 @@
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import ConfigType
 
-from .custom_components.file_utilities.const import DOMAIN
-from .custom_components.file_utilities.services import register_file_services
+from .const import DOMAIN
+from .services import register_file_services
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
