@@ -1,0 +1,64 @@
+read:
+  name: Read File
+  description: >
+    Reads the contents of a file and returns it as text. Relative paths default
+    to /config.
+  fields:
+    path:
+      name: File Path
+      description: >
+        Path to the file. Relative paths are resolved under /config.
+      required: true
+      example: 'sqconfig.json'
+      selector:
+        text:
+    encoding:
+      name: Encoding
+      description: File encoding to use when reading.
+      required: false
+      default: utf-8
+      example: 'utf-8'
+      selector:
+        text:
+  response:
+    description: File contents
+    optional: false
+    schema:
+      type: object
+      properties:
+        content:
+          type: string
+          example: '{ "enabled": true }'
+
+write:
+  name: Write File
+  description: >
+    Writes text content to a file. Writes are atomic by default. Relative paths
+    default to /config.
+  fields:
+    path:
+      required: true
+      selector:
+        text:
+    content:
+      required: true
+      selector:
+        text:
+          multiline: true
+    encoding:
+      required: false
+      default: utf-8
+      selector:
+        text:
+    create:
+      required: false
+      default: true
+      selector:
+        boolean: {}
+    atomic:
+      name: Atomic Write
+      description: Write the file atomically (recommended).
+      required: false
+      default: true
+      selector:
+        boolean: {}

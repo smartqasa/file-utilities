@@ -1,0 +1,10 @@
+{
+  "name": "File Utilities",
+  "domain": "file_utilities",
+  "version": "0.1.0",
+  "documentation": "https://github.com/smartqasa/file-utilities",
+  "issue_tracker": "https://github.com/smartqasa/file-utilities/issues",
+  "codeowners": ["@smartqasa"],
+  "iot_class": "local_push",
+  "quality_scale": "silver"
+}
