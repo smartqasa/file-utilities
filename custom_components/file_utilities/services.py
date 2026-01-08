@@ -5,7 +5,7 @@ from typing import Any, cast
 
 import voluptuous as vol
 
-from homeassistant.core import HomeAssistant, ServiceCall
+from homeassistant.core import HomeAssistant, ServiceCall, SupportsResponse
 import homeassistant.helpers.config_validation as cv
 
 from .const import (
@@ -45,7 +45,7 @@ def register_file_services(hass: HomeAssistant) -> None:
             except FileNotFoundError:
                 raise ValueError(f"File not found: {path}")
 
-        return {"content": content}
+        return {"success": True,"content": content}
 
     async def handle_write(call: ServiceCall) -> ServiceResponse:
         try:
@@ -94,7 +94,7 @@ def register_file_services(hass: HomeAssistant) -> None:
                 vol.Optional(ATTR_ENCODING, default="utf-8"): cv.string,
             }
         ),
-        supports_response="only",
+        supports_response=SupportsResponse.ONLY,
     )
 
     # WRITE
@@ -111,5 +111,5 @@ def register_file_services(hass: HomeAssistant) -> None:
                 vol.Optional(ATTR_ATOMIC, default=True): cv.boolean,
             }
         ),
-        supports_response="only",
+        supports_response=SupportsResponse.ONLY,
     )
