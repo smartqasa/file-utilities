@@ -21,8 +21,7 @@ from .const import (
 )
 from .path import validate_path, PathValidationError
 
-# Workaround for HA typing lag
-SupportsResponse = Any
+ServiceResponse = dict[str, Any]
 
 # Single integration-wide lock
 _FILE_LOCK = asyncio.Lock()
@@ -31,7 +30,7 @@ _FILE_LOCK = asyncio.Lock()
 def register_file_services(hass: HomeAssistant) -> None:
     """Register file utility services."""
 
-    async def handle_read(call: ServiceCall) -> dict[str, Any]:
+    async def handle_read(call: ServiceCall) -> ServiceResponse:
         try:
             path = validate_path(call.data[ATTR_PATH], ALLOWED_ROOTS)
         except PathValidationError as err:
@@ -48,7 +47,7 @@ def register_file_services(hass: HomeAssistant) -> None:
 
         return {"content": content}
 
-    async def handle_write(call: ServiceCall) -> None:
+    async def handle_write(call: ServiceCall) -> ServiceResponse:
         try:
             path = validate_path(call.data[ATTR_PATH], ALLOWED_ROOTS)
         except PathValidationError as err:
@@ -78,6 +77,11 @@ def register_file_services(hass: HomeAssistant) -> None:
             else:
                 with open(path, "w", encoding=encoding) as f:
                     f.write(content)
+        return {
+            "success": True,
+            "path": path,
+            "atomic": atomic,
+        }
 
     # READ
     hass.services.async_register(
@@ -90,7 +94,7 @@ def register_file_services(hass: HomeAssistant) -> None:
                 vol.Optional(ATTR_ENCODING, default="utf-8"): cv.string,
             }
         ),
-        supports_response=cast(SupportsResponse, "only"),
+        supports_response="only",
     )
 
     # WRITE
@@ -107,4 +111,5 @@ def register_file_services(hass: HomeAssistant) -> None:
                 vol.Optional(ATTR_ATOMIC, default=True): cv.boolean,
             }
         ),
+        supports_response="only",
     )
