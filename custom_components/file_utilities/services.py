@@ -111,5 +111,5 @@ def register_file_services(hass: HomeAssistant) -> None:
                 vol.Optional(ATTR_ATOMIC, default=True): cv.boolean,
             }
         ),
-        supports_response=SupportsResponse.ONLY,
+        supports_response=SupportsResponse.OPTIONAL,
     )
